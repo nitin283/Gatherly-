@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.gatherly.model.EventStatus;
 import com.example.gatherly.model.Role;
@@ -44,11 +45,12 @@ public class AdminController {
 
     // ===== Approve =====
     @PostMapping("/dashboard/admin/events/{id}/approve")
-    public String approve(@PathVariable Long id, Model model) {
+    public String approve(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             eventService.approveEvent(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Event approved and published.");
         } catch (BusinessRuleException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/dashboard/admin";
     }
@@ -64,7 +66,8 @@ public class AdminController {
     @PostMapping("/dashboard/admin/events/{id}/reject")
     public String rejectSubmit(@PathVariable Long id,
                                 @RequestParam String reason,
-                                Model model) {
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
         try {
             eventService.rejectEvent(id, reason);
         } catch (BusinessRuleException e) {
@@ -72,6 +75,7 @@ public class AdminController {
             model.addAttribute("event", eventService.getById(id));
             return "admin/reject-event";
         }
+        redirectAttributes.addFlashAttribute("successMessage", "Event rejected.");
         return "redirect:/dashboard/admin";
     }
 
@@ -91,7 +95,7 @@ public class AdminController {
     // ===== Booking overview =====
     @GetMapping("/dashboard/admin/bookings")
     public String bookings(Model model) {
-        model.addAttribute("bookings", bookingService.getAllBookings());
+        model.addAttribute("bookings", bookingService.getAllBookingsForAdmin());
         return "admin/bookings";
     }
 }

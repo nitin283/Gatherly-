@@ -16,6 +16,9 @@
         <a th:href="@{/dashboard/organizer/events/new}" class="btn btn-primary">+ Create Event</a>
     </div>
 
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
     <div th:if="${#lists.isEmpty(events)}" class="empty-state">
         You haven't created any events yet. Click "Create Event" to get started.
     </div>

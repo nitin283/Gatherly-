@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.gatherly.dto.CreateEventRequest;
 import com.example.gatherly.dto.TicketTypeRequest;
@@ -61,7 +62,8 @@ public class OrganizerController {
     public String create(@AuthenticationPrincipal User organizer,
                           @Valid @ModelAttribute("createEventRequest") CreateEventRequest request,
                           BindingResult bindingResult,
-                          Model model) {
+                          Model model,
+                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "organizer/create-event";
         }
@@ -89,6 +91,7 @@ public class OrganizerController {
             return "organizer/create-event";
         }
 
+        redirectAttributes.addFlashAttribute("successMessage", "Event submitted for admin approval.");
         return "redirect:/dashboard/organizer";
     }
 
@@ -188,7 +191,8 @@ public class OrganizerController {
     public String edit(@AuthenticationPrincipal User organizer,
                         @PathVariable Long id,
                         @ModelAttribute Event formEvent,
-                        Model model) {
+                        Model model,
+                        RedirectAttributes redirectAttributes) {
         try {
             eventService.updateEvent(id, organizer.getId(), formEvent);
         } catch (BusinessRuleException e) {
@@ -196,6 +200,7 @@ public class OrganizerController {
             model.addAttribute("event", formEvent);
             return "organizer/edit-event";
         }
+        redirectAttributes.addFlashAttribute("successMessage", "Event updated and sent for approval again.");
         return "redirect:/dashboard/organizer";
     }
 
@@ -212,13 +217,15 @@ public class OrganizerController {
 
     // ===== Delete: handle submit =====
     @PostMapping("/dashboard/organizer/events/{id}/delete")
-    public String delete(@AuthenticationPrincipal User organizer, @PathVariable Long id, Model model) {
+    public String delete(@AuthenticationPrincipal User organizer, @PathVariable Long id,
+                         RedirectAttributes redirectAttributes) {
         try {
             eventService.deleteEvent(id, organizer.getId());
         } catch (BusinessRuleException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/dashboard/organizer";
         }
+        redirectAttributes.addFlashAttribute("successMessage", "Event deleted.");
         return "redirect:/dashboard/organizer";
     }
 }

@@ -16,6 +16,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @EntityGraph(attributePaths = {"event", "items", "items.ticketType"})
     List<Booking> findByAttendeeIdOrderByBookingDateDesc(Long attendeeId);
 
+    // Admin booking list displays the attendee name and event title.
+    @EntityGraph(attributePaths = {"attendee", "event"})
+    List<Booking> findAllByOrderByBookingDateDesc();
+
     // Organizer: bookings of one event
     List<Booking> findByEventId(Long eventId);
 

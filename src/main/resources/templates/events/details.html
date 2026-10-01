@@ -10,9 +10,10 @@
 
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 
-<div class="container">
+<div class="container event-details-page">
     <div class="event-banner" style="height:220px; border-radius:10px; margin-top:20px;"></div>
 
+    <div class="event-details-copy">
     <span class="pill pill-approved" style="margin-top:16px; display:inline-block;" th:text="${event.category}">Category</span>
     <h1 th:text="${event.title}">Event Title</h1>
     <p class="card-meta">
@@ -20,6 +21,7 @@
         &nbsp;•&nbsp; 📍 <span th:text="${event.venue}">Venue</span>
     </p>
     <p th:text="${event.description}">Description</p>
+    </div>
 
     <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
 
@@ -36,7 +38,8 @@
     <form th:if="${!#lists.isEmpty(ticketTypes)}"
           sec:authorize="hasRole('ATTENDEE')"
           th:action="@{/events/{id}/book(id=${event.id})}" th:object="${bookingRequest}" method="post">
-        <table>
+        <div class="ticket-table-scroll">
+        <table class="ticket-table">
             <thead>
                 <tr><th>Type</th><th>Price</th><th>Available</th><th>Quantity</th></tr>
             </thead>
@@ -54,6 +57,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
         <button type="submit" class="btn btn-primary">Book Now</button>
     </form>
 </div>

@@ -15,6 +15,7 @@
         <h1>Admin Dashboard</h1>
     </div>
 
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
     <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
 
     <div class="stats-row">

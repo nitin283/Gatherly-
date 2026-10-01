@@ -168,6 +168,10 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
+    public List<Booking> getAllBookingsForAdmin() {
+        return bookingRepository.findAllByOrderByBookingDateDesc();
+    }
+
     private String generateReference() {
         return "GTH-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
