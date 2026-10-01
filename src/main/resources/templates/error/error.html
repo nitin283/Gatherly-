@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Something Went Wrong — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="hero">
+    <h1 th:text="${status} ?: 'Error'">500</h1>
+    <p>Something went wrong on our end. Please try again.</p>
+    <div class="hero-actions">
+        <a th:href="@{/}" class="btn btn-primary">Go Home</a>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

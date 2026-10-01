@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>All Bookings — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="dashboard-header">
+        <h1>All Bookings</h1>
+        <a th:href="@{/dashboard/admin}" class="btn btn-outline btn-sm">Back to Dashboard</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(bookings)}" class="empty-state">
+        No bookings have been made yet.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(bookings)}">
+        <thead>
+            <tr><th>Reference</th><th>Attendee</th><th>Event</th><th>Total</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="booking : ${bookings}">
+                <td th:text="${booking.bookingReference}">GTH-XXXX</td>
+                <td th:text="${booking.attendee.fullName}">Attendee</td>
+                <td th:text="${booking.event.title}">Event</td>
+                <td th:text="'₹' + ${booking.totalAmount}">₹0</td>
+                <td>
+                    <span th:if="${booking.status.name() == 'CONFIRMED'}" class="pill pill-confirmed">Confirmed</span>
+                    <span th:if="${booking.status.name() == 'CANCELLED'}" class="pill pill-cancelled">Cancelled</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

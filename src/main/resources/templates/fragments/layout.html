@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<nav th:fragment="navbar" class="navbar">
+    <div class="navbar-inner">
+        <a th:href="@{/}" class="brand">Gatherly</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/events}">Browse Events</a></li>
+
+            <!-- Logged OUT -->
+            <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+            <li sec:authorize="isAnonymous()"><a th:href="@{/register}" class="btn btn-primary btn-sm">Sign Up</a></li>
+
+            <!-- Logged IN: role-specific dashboard link -->
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/dashboard/admin}">Admin Dashboard</a></li>
+            <li sec:authorize="hasRole('ORGANIZER')"><a th:href="@{/dashboard/organizer}">My Events</a></li>
+            <li sec:authorize="hasRole('ATTENDEE')"><a th:href="@{/dashboard/attendee}">My Bookings</a></li>
+
+            <li sec:authorize="isAuthenticated()">
+                <span class="badge-role" sec:authentication="principal.role"></span>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-outline btn-sm">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<footer th:fragment="footer" class="footer">
+    &copy; 2026 Gatherly &mdash; Web-Based Online Event Management System
+</footer>
+
+</body>
+</html>

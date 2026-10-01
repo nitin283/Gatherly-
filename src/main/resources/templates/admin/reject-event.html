@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reject Event — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="form-wrapper">
+    <h2>Reject Event</h2>
+    <p class="card-meta" th:text="${event.title}">Event Title</p>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/dashboard/admin/events/{id}/reject(id=${event.id})}" method="post">
+        <div class="form-group">
+            <label for="reason">Reason for rejection</label>
+            <textarea id="reason" name="reason" rows="4" required
+                      placeholder="Explain why this event is being rejected..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger" style="width:100%">Confirm Rejection</button>
+    </form>
+
+    <p class="form-footer-link">
+        <a th:href="@{/dashboard/admin}">Cancel and go back</a>
+    </p>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

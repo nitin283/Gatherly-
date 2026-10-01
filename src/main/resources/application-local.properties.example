@@ -1,0 +1,3 @@
+
+spring.datasource.username=gatherly_user
+spring.datasource.password= hello_password

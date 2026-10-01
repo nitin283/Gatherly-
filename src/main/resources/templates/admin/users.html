@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Users — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Manage Users</h1>
+        <a th:href="@{/dashboard/admin}" class="btn btn-outline btn-sm">Back to Dashboard</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.fullName}">Name</td>
+                <td th:text="${user.email}">email@example.com</td>
+                <td th:text="${user.role}">ATTENDEE</td>
+                <td>
+                    <span th:if="${user.enabled}" class="pill pill-approved">Enabled</span>
+                    <span th:unless="${user.enabled}" class="pill pill-rejected">Disabled</span>
+                </td>
+                <td>
+                    <form th:if="${user.enabled}"
+                          th:action="@{/dashboard/admin/users/{id}/toggle(id=${user.id})}"
+                          method="post" style="display:inline;">
+                        <input type="hidden" name="enabled" value="false">
+                        <button type="submit" class="btn btn-danger btn-sm">Disable</button>
+                    </form>
+                    <form th:unless="${user.enabled}"
+                          th:action="@{/dashboard/admin/users/{id}/toggle(id=${user.id})}"
+                          method="post" style="display:inline;">
+                        <input type="hidden" name="enabled" value="true">
+                        <button type="submit" class="btn btn-success btn-sm">Enable</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

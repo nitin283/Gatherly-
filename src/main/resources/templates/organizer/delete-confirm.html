@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Delete Event — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="form-wrapper">
+    <h2>Delete Event?</h2>
+    <p>Are you sure you want to delete <strong th:text="${event.title}">this event</strong>? This cannot be undone.</p>
+
+    <form th:action="@{/dashboard/organizer/events/{id}/delete(id=${event.id})}" method="post">
+        <button type="submit" class="btn btn-danger" style="width:100%">Yes, Delete Permanently</button>
+    </form>
+
+    <p class="form-footer-link">
+        <a th:href="@{/dashboard/organizer}">Cancel and go back</a>
+    </p>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

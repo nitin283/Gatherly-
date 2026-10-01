@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Event — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="dashboard-header">
+        <h1 th:text="${event.title}">Event Title</h1>
+        <span th:if="${event.status.name() == 'PENDING'}" class="pill pill-pending">Pending</span>
+        <span th:if="${event.status.name() == 'APPROVED'}" class="pill pill-approved">Approved</span>
+        <span th:if="${event.status.name() == 'REJECTED'}" class="pill pill-rejected">Rejected</span>
+        <p th:if="${event.status.name() == 'REJECTED'}" class="form-error" th:text="'Reason: ' + ${event.rejectionReason}"></p>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-number" th:text="${#lists.size(bookings)}">0</div>
+            <div class="stat-label">Total Bookings</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="'₹' + ${revenue}">₹0</div>
+            <div class="stat-label">Revenue (Confirmed)</div>
+        </div>
+    </div>
+
+    <h3>Ticket Types</h3>
+    <table>
+        <thead><tr><th>Type</th><th>Price</th><th>Total</th><th>Available</th></tr></thead>
+        <tbody>
+            <tr th:each="tt : ${ticketTypes}">
+                <td th:text="${tt.typeName}">GENERAL</td>
+                <td th:text="'₹' + ${tt.price}">₹0</td>
+                <td th:text="${tt.totalQuantity}">0</td>
+                <td th:text="${tt.availableQuantity}">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${canAddMore}" class="form-wrapper" style="margin:20px 0;">
+        <h3>Add Another Ticket Type</h3>
+        <form th:action="@{/dashboard/organizer/events/{id}/ticket-types(id=${event.id})}"
+              th:object="${ticketTypeRequest}" method="post">
+            <div class="form-group">
+                <label for="typeName">Ticket Type</label>
+                <select id="typeName" th:field="*{typeName}">
+                    <option value="GENERAL">General</option>
+                    <option value="PREMIUM">Premium</option>
+                    <option value="VIP">VIP</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price2">Price (₹)</label>
+                <input type="number" step="0.01" min="0" id="price2" th:field="*{price}">
+                <div class="form-error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            </div>
+            <div class="form-group">
+                <label for="quantity2">Quantity Available</label>
+                <input type="number" min="1" id="quantity2" th:field="*{quantity}">
+                <div class="form-error" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Ticket Type</button>
+        </form>
+    </div>
+    <p th:unless="${canAddMore}" class="card-meta">This event already has all 3 ticket types.</p>
+
+    <h3>Bookings for This Event</h3>
+    <div th:if="${#lists.isEmpty(bookings)}" class="empty-state">No bookings yet.</div>
+    <table th:if="${!#lists.isEmpty(bookings)}">
+        <thead><tr><th>Reference</th><th>Attendee</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+            <tr th:each="b : ${bookings}">
+                <td th:text="${b.bookingReference}">GTH-XXXX</td>
+                <td th:text="${b.attendee.fullName}">Attendee</td>
+                <td th:text="'₹' + ${b.totalAmount}">₹0</td>
+                <td>
+                    <span th:if="${b.status.name() == 'CONFIRMED'}" class="pill pill-confirmed">Confirmed</span>
+                    <span th:if="${b.status.name() == 'CANCELLED'}" class="pill pill-cancelled">Cancelled</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/dashboard/organizer}" class="btn btn-outline">Back to My Events</a>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-number" th:text="${totalUsers}">0</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="${totalEvents}">0</div>
+            <div class="stat-label">Total Events</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="${pendingCount}">0</div>
+            <div class="stat-label">Pending Approval</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="${totalBookings}">0</div>
+            <div class="stat-label">Total Bookings</div>
+        </div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+        <a th:href="@{/dashboard/admin/users}" class="btn btn-outline btn-sm">Manage Users</a>
+        <a th:href="@{/dashboard/admin/bookings}" class="btn btn-outline btn-sm">View All Bookings</a>
+    </div>
+
+    <h3>Events Awaiting Approval</h3>
+
+    <div th:if="${#lists.isEmpty(pendingEvents)}" class="empty-state">
+        No events are waiting for approval right now.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(pendingEvents)}">
+        <thead>
+            <tr><th>Title</th><th>Organizer</th><th>Date</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="event : ${pendingEvents}">
+                <td th:text="${event.title}">Sample Event</td>
+                <td th:text="${event.organizer.fullName}">Organizer Name</td>
+                <td th:text="${#temporals.format(event.eventDate, 'dd MMM yyyy')}">15 Nov 2026</td>
+                <td><span class="pill pill-pending">Pending</span></td>
+                <td>
+                    <form th:action="@{/dashboard/admin/events/{id}/approve(id=${event.id})}"
+                          method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                    </form>
+                    <a th:href="@{/dashboard/admin/events/{id}/reject(id=${event.id})}"
+                       class="btn btn-danger btn-sm">Reject</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

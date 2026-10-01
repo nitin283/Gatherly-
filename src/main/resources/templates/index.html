@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gatherly — Discover Events</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<section class="hero">
+    <h1 th:text="${appName}">Gatherly</h1>
+    <p th:text="${tagline}">Discover, create and book events, all in one place.</p>
+    <div class="hero-actions">
+        <a th:href="@{/events}" class="btn btn-primary">Browse Events</a>
+        <a th:href="@{/register}" class="btn btn-outline">Get Started</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

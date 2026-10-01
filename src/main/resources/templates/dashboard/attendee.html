@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Bookings — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="dashboard-header">
+        <h1>My Bookings</h1>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <div th:if="${#lists.isEmpty(bookings)}" class="empty-state">
+        You haven't booked any events yet. <a th:href="@{/events}">Browse events</a>.
+    </div>
+
+    <table th:if="${!#lists.isEmpty(bookings)}">
+        <thead>
+            <tr><th>Reference</th><th>Event</th><th>Tickets</th><th>Total</th><th>Status</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="b : ${bookings}">
+                <td th:text="${b.bookingReference}">GTH-XXXX</td>
+                <td th:text="${b.event.title}">Event</td>
+                <td>
+                    <span th:each="item, iStat : ${b.items}">
+                        <span th:text="${item.quantity} + 'x ' + ${item.ticketType.typeName}">2x General</span><span th:if="${!iStat.last}">, </span>
+                    </span>
+                </td>
+                <td th:text="'₹' + ${b.totalAmount}">₹0</td>
+                <td>
+                    <span th:if="${b.status.name() == 'CONFIRMED'}" class="pill pill-confirmed">Confirmed</span>
+                    <span th:if="${b.status.name() == 'CANCELLED'}" class="pill pill-cancelled">Cancelled</span>
+                </td>
+                <td>
+                    <form th:if="${b.status.name() == 'CONFIRMED'}"
+                          th:action="@{/dashboard/attendee/bookings/{id}/cancel(id=${b.id})}" method="post">
+                        <button type="submit" class="btn btn-outline btn-sm">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

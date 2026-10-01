@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Browse Events — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Browse Events</h1>
+    </div>
+
+    <form th:action="@{/events}" method="get" style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+        <input type="text" name="title" placeholder="Search by title..." th:value="${title}" style="flex:1; min-width:200px; padding:10px; border:1px solid #e5e7eb; border-radius:8px;">
+        <input type="text" name="category" placeholder="Category..." th:value="${category}" style="min-width:150px; padding:10px; border:1px solid #e5e7eb; border-radius:8px;">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a th:href="@{/events}" class="btn btn-outline">Clear</a>
+    </form>
+
+    <div th:if="${#lists.isEmpty(events)}" class="empty-state">
+        No approved events found. Try a different search.
+    </div>
+
+    <div class="grid" th:if="${!#lists.isEmpty(events)}">
+        <div class="card" th:each="event : ${events}">
+            <div class="event-banner"></div>
+            <div class="card-body">
+                <span class="pill pill-approved" th:text="${event.category}">Category</span>
+                <h3 class="card-title" th:text="${event.title}">Event Title</h3>
+                <p class="card-meta">
+                    📅 <span th:text="${#temporals.format(event.eventDate, 'dd MMM yyyy, hh:mm a')}">Date</span>
+                    &nbsp;•&nbsp; 📍 <span th:text="${event.venue}">Venue</span>
+                </p>
+                <a th:href="@{/events/{id}(id=${event.id})}" class="btn btn-outline btn-sm">View Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

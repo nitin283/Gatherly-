@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Page Not Found — Gatherly</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="hero">
+    <h1>404</h1>
+    <p th:text="${message} ?: 'The page you\'re looking for doesn\'t exist.'">Not found</p>
+    <div class="hero-actions">
+        <a th:href="@{/}" class="btn btn-primary">Go Home</a>
+        <a th:href="@{/events}" class="btn btn-outline">Browse Events</a>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>
