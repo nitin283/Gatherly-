@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.gatherly.service.BusinessRuleException;
 import com.example.gatherly.service.ResourceNotFoundException;
 
+/** Converts expected application exceptions into friendly pages or messages. */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

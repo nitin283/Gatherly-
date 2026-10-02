@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+/** Configures form login, password hashing, and role-based route access. */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -43,7 +44,8 @@ public class SecurityConfig {
                         .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/css/**", "/js/**", "/images/**",
                                   "/login", "/register").permitAll()
-                .requestMatchers(HttpMethod.POST, "/events/*/book").hasRole("ATTENDEE")   // NEW
+                // Browsing is public; booking and dashboards are protected by role.
+                .requestMatchers(HttpMethod.POST, "/events/*/book").hasRole("ATTENDEE")
                 .requestMatchers("/events", "/events/**").permitAll()
                 .requestMatchers("/dashboard/admin/**").hasRole("ADMIN")
                 .requestMatchers("/dashboard/organizer/**").hasRole("ORGANIZER")

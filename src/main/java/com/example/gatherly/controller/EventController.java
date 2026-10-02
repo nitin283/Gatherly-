@@ -15,6 +15,7 @@ import com.example.gatherly.model.TicketType;
 import com.example.gatherly.repository.TicketTypeRepository;
 import com.example.gatherly.service.EventService;
 
+/** Handles public event browsing, search, filtering, and event detail pages. */
 @Controller
 public class EventController {
 

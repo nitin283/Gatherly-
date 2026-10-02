@@ -20,6 +20,8 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+/** JPA entity holding a ticket option, its price, and available stock. */
+/** JPA entity holding a ticket option, its price, and available stock. */
 @Entity
 @Table(name = "ticket_types")
 public class TicketType {

@@ -22,6 +22,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/** JPA account entity and Spring Security identity for each Gatherly user. */
+/** JPA account entity and Spring Security identity for each Gatherly user. */
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {

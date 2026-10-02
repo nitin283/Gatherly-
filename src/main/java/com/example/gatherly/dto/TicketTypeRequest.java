@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/** Holds and validates values submitted when an organizer adds a ticket type. */
 public class TicketTypeRequest {
 
     @NotBlank(message = "Choose a ticket type")

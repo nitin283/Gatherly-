@@ -14,6 +14,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+/** JPA line item recording a ticket type, quantity, and booking-time price. */
+/** JPA line item recording a ticket type, quantity, and booking-time price. */
 @Entity
 @Table(name = "booking_items")
 public class BookingItem {

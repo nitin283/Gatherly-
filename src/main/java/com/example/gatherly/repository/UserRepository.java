@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.gatherly.model.Role;
 import com.example.gatherly.model.User;
 
+/** Database queries for user accounts. */
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);

@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/** Checks the configured database connection once when the application starts. */
 @Configuration
 public class DatabaseCheck {
 

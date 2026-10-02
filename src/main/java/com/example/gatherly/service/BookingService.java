@@ -18,6 +18,7 @@ import com.example.gatherly.model.User;
 import com.example.gatherly.repository.BookingRepository;
 import com.example.gatherly.repository.TicketTypeRepository;
 
+/** Applies booking, stock, pricing, and cancellation rules transactionally. */
 @Service
 public class BookingService {
 
@@ -75,6 +76,7 @@ public class BookingService {
 
     // Books several ticket types from the SAME event in one transaction.
     // selections: list of (ticketTypeId, quantity) pairs, all validated together.
+    // Any rule failure rolls back stock updates and prevents a partial booking.
     @Transactional
     public Booking bookMultipleTickets(User attendee, Long eventId, List<TicketSelectionRequest> selections) {
 
@@ -144,7 +146,7 @@ public class BookingService {
             throw new BusinessRuleException("Cannot cancel a booking for a past event.");
         }
 
-        // Return the tickets to stock
+        // Return every item to stock in the same transaction as the cancellation.
         for (BookingItem item : booking.getItems()) {
             TicketType tt = ticketTypeRepository.findWithLockById(item.getTicketType().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Ticket type not found."));

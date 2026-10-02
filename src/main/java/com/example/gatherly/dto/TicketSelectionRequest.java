@@ -1,5 +1,6 @@
 package com.example.gatherly.dto;
 
+/** Holds one ticket type identifier and the quantity requested for it. */
 public class TicketSelectionRequest {
 
     private Long ticketTypeId;

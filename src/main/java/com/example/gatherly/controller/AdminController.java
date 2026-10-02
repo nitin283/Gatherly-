@@ -16,6 +16,7 @@ import com.example.gatherly.service.BusinessRuleException;
 import com.example.gatherly.service.EventService;
 import com.example.gatherly.service.UserService;
 
+/** Provides administrator dashboard, event review, user, and booking routes. */
 @Controller
 public class AdminController {
 

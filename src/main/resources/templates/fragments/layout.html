@@ -2,9 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
+<!-- Shared navigation and footer fragments used by all application pages. -->
 <nav th:fragment="navbar" class="navbar">
     <div class="navbar-inner">
-        <a th:href="@{/}" class="brand">Gatherly</a>
+        <a th:href="@{/}" class="brand" aria-label="Gatherly home">
+            <img class="brand-logo" th:src="@{/images/Gatherly event management logo.png}" alt="Gatherly">
+        </a>
         <ul class="nav-links">
             <li><a th:href="@{/events}">Browse Events</a></li>
 

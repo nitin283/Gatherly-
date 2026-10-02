@@ -8,19 +8,24 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.gatherly.model.Event;
 import com.example.gatherly.model.EventStatus;
 import com.example.gatherly.model.User;
+import com.example.gatherly.repository.BookingRepository;
 import com.example.gatherly.repository.EventRepository;
 
+/** Applies event ownership, approval, editing, and deletion rules. */
 @Service
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final BookingRepository bookingRepository;
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, BookingRepository bookingRepository) {
         this.eventRepository = eventRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     public Event createEvent(Event event, User organizer) {
         event.setOrganizer(organizer);
+        // New and edited events require an administrator's review before public listing.
         event.setStatus(EventStatus.PENDING);
         return eventRepository.save(event);
     }
@@ -84,15 +89,21 @@ public class EventService {
         event.setCategory(changes.getCategory());
         event.setVenue(changes.getVenue());
         event.setEventDate(changes.getEventDate());
+        // Editing an approved event sends it through approval again.
         event.setStatus(EventStatus.PENDING);
         event.setRejectionReason(null);
         return eventRepository.save(event);
     }
 
+    @Transactional
     public void deleteEvent(Long eventId, Long requesterId) {
         Event event = getById(eventId);
         if (!event.getOrganizer().getId().equals(requesterId)) {
             throw new BusinessRuleException("You can only delete your own events.");
+        }
+        if (bookingRepository.countByEventId(eventId) > 0) {
+            // Keep existing booking records and their foreign-key references intact.
+            throw new BusinessRuleException("This event has bookings and cannot be deleted.");
         }
         eventRepository.delete(event);
     }

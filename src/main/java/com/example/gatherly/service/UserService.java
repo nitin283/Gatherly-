@@ -9,6 +9,7 @@ import com.example.gatherly.model.Role;
 import com.example.gatherly.model.User;
 import com.example.gatherly.repository.UserRepository;
 
+/** Applies account registration and administration rules. */
 @Service
 public class UserService {
 
@@ -21,6 +22,7 @@ public class UserService {
     }
 
     public User registerAttendeeOrOrganizer(String fullName, String email, String rawPassword, Role role) {
+        // Public registration must never allow someone to create an administrator account.
         if (role != Role.ATTENDEE && role != Role.ORGANIZER) {
             throw new BusinessRuleException("Invalid role selected.");
         }
@@ -52,6 +54,7 @@ public class UserService {
     }
 
     public void setEnabled(Long userId, boolean enabled) {
+        // Spring Security checks this flag during login, so disabling an account blocks future sign-ins.
         User user = getById(userId);
         user.setEnabled(enabled);
         userRepository.save(user);

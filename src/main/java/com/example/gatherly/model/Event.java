@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +25,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+/** JPA entity describing an organizer-owned event and its approval state. */
+/** JPA entity describing an organizer-owned event and its approval state. */
 @Entity
 @Table(name = "events")
 public class Event {
@@ -52,6 +55,7 @@ public class Event {
     private String venue;
 
     @NotNull(message = "Event date is required")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 

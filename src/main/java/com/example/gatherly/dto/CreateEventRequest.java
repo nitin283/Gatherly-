@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/** Holds and validates event and first-ticket values from the create form. */
 public class CreateEventRequest {
 
     @NotBlank(message = "Title is required")

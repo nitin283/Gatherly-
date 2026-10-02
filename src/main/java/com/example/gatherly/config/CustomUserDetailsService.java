@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.gatherly.repository.UserRepository;
 
+/** Loads a stored account by email for Spring Security authentication. */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

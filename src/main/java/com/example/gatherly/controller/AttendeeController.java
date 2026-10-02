@@ -16,6 +16,7 @@ import com.example.gatherly.model.User;
 import com.example.gatherly.service.BookingService;
 import com.example.gatherly.service.BusinessRuleException;
 
+/** Handles attendee booking history, ticket purchases, and cancellations. */
 @Controller
 public class AttendeeController {
 

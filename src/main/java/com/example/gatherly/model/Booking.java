@@ -23,6 +23,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
+/** JPA entity representing one attendee's booking for an event. */
+/** JPA entity representing one attendee's booking for an event. */
 @Entity
 @Table(name = "bookings")
 public class Booking {

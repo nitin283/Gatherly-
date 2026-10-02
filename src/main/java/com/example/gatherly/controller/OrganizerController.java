@@ -27,6 +27,7 @@ import com.example.gatherly.service.EventService;
 
 import jakarta.validation.Valid;
 
+/** Handles an organizer's events, ticket types, and event-specific bookings. */
 @Controller
 public class OrganizerController {
 
@@ -149,12 +150,19 @@ public class OrganizerController {
             return reloadManagePage(event, model);
         }
 
+        if (ticketTypeRepository.findByEventId(id).size() >= 3) {
+            model.addAttribute("errorMessage", "An event can have a maximum of 3 ticket types.");
+            return reloadManagePage(event, model);
+        }
+
         TicketType ticketType = new TicketType();
         ticketType.setTypeName(typeName);
         ticketType.setPrice(request.getPrice());
         ticketType.setTotalQuantity(request.getQuantity());
         ticketType.setAvailableQuantity(request.getQuantity());
-        event.addTicketType(ticketType);
+        // TicketType owns the event foreign key. This event was loaded by a
+        // repository call and is detached here, so don't modify its lazy collection.
+        ticketType.setEvent(event);
         ticketTypeRepository.save(ticketType);
 
         return "redirect:/dashboard/organizer/events/" + id;
@@ -190,9 +198,13 @@ public class OrganizerController {
     @PostMapping("/dashboard/organizer/events/{id}/edit")
     public String edit(@AuthenticationPrincipal User organizer,
                         @PathVariable Long id,
-                        @ModelAttribute Event formEvent,
+                        @Valid @ModelAttribute("event") Event formEvent,
+                        BindingResult bindingResult,
                         Model model,
                         RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "organizer/edit-event";
+        }
         try {
             eventService.updateEvent(id, organizer.getId(), formEvent);
         } catch (BusinessRuleException e) {

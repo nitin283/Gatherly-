@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,7 @@
 </head>
 <body>
 
+<!-- Public landing page; the Get Started action is hidden for signed-in users. -->
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 
 <section class="hero">
@@ -15,7 +16,7 @@
     <p th:text="${tagline}">Discover, create and book events, all in one place.</p>
     <div class="hero-actions">
         <a th:href="@{/events}" class="btn btn-primary">Browse Events</a>
-        <a th:href="@{/register}" class="btn btn-outline">Get Started</a>
+        <a sec:authorize="isAnonymous()" th:href="@{/register}" class="btn btn-outline">Get Started</a>
     </div>
 </section>
 

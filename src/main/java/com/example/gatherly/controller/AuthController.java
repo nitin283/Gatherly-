@@ -14,6 +14,7 @@ import com.example.gatherly.service.UserService;
 
 import jakarta.validation.Valid;
 
+/** Handles registration pages and supplies the custom login page. */
 @Controller
 public class AuthController {
 
